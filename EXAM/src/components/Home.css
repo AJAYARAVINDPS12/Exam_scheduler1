@@ -1,0 +1,139 @@
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    padding: 0px;
+    background: linear-gradient(to bottom right, #95DBE5FF, #078282FF,#339E66FF);
+    animation: gradientShift 8s ease infinite; /* Subtle animation effect */
+    color: #ecf0f1;
+  }
+  
+  .home-content {
+    text-align: center;
+    max-width: 900px;
+    width: 100%;  
+    margin-left: 30px;
+  }
+  
+  .welcome-message {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    font-style: italic;
+  }
+  
+  .exam-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .exam-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: left;
+  }
+  
+  .exam-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.15);
+  }
+  
+  .exam-item h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+  }
+  
+  .exam-item span {
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  
+  .no-exams-message,
+  .loading-message,
+  .error-message {
+    text-align: center;
+    color: #ecf0f1;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+  }
+  
+
+  /* Image container */
+.image-container {
+  margin-top: 0px;
+  width: 80%; /* Full width */
+ 
+  text-align: center;
+}
+
+/* Image styles */
+.image-container img {
+  width: 100%; /* Make the image responsive */
+  max-height: 500px; /* Limit the height */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+  display: block; /* Remove inline spacing caused by inline-block */
+  margin: 0 auto; /* Center the image */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .image-container {
+      margin-top: 20px;
+  }
+}
+
+
+.exam-item.clickable {
+  cursor: pointer;
+}
+
+.exam-item.clickable:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Add a hover effect */
+  transform: scale(1.02); /* Slight zoom-in effect */
+}
+
+.exam-details {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.exam-details h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.exam-details span {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.back-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+}
+  

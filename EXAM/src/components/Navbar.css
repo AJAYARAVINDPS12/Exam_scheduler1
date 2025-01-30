@@ -1,0 +1,85 @@
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: #ffffff; /* Example background color */
+    height: 80px;
+}
+
+.navbar-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-left: 85px;
+}
+
+.nav-item {
+    margin: 0 10px;
+}
+
+.nav-links {
+    text-decoration: none;
+    color: #555;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links:hover {
+    color: #007bff; /* Example hover color */
+}
+
+.nav-user {
+    font-weight: bold;
+    color: #333;
+    margin-right: 10px;
+}
+
+.nav-logout {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav-logout:hover {
+    background-color: #c82333;
+}
+
+.nav-buttons-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 50px; /* Space between buttons */
+    flex-grow: 1;
+    margin-left: 100px;
+}
+
+/* Button styling */
+.nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #555;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+    text-align: center;
+}
+
+.nav-button:hover {
+    color: #007bff;
+    transform: scale(1.1);
+}
+

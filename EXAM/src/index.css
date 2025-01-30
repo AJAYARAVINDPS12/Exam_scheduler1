@@ -1,0 +1,19 @@
+/* Basic reset and general styles */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+}
+nav li {
+    margin-right: 15px; /* Add spacing between menu items */
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,95 @@
+.schedule-exam-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #95DBE5FF, #078282FF,#339E66FF);/* Gradient background */
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  color: #ecf0f1;
+}
+
+.schedule-exam-box {
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent glass-like background */
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Light border for the glass effect */
+  backdrop-filter: blur(10px); /* Glassy blur effect */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.schedule-exam-box:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.15); /* Slight lift effect on hover */
+}
+
+.schedule-exam-box h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #ecf0f1; /* White text */
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #ecf0f1;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.4); /* Semi-transparent border */
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2); /* Slightly transparent background */
+  color: #ecf0f1;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #fff; /* Bright border on focus */
+}
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+.schedule-button {
+  background-color: #6c5ce7;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.schedule-button:hover {
+  background-color: #a29bfe;
+  transform: scale(1.05); /* Slightly enlarges on hover */
+}
+
+@media (max-width: 500px) {
+  .schedule-exam-box {
+      padding: 1.5rem;
+  }
+
+  .schedule-button {
+      font-size: 14px;
+  }
+}

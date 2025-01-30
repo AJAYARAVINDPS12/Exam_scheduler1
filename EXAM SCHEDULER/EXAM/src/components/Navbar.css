@@ -7,6 +7,17 @@
     height: 80px;
 }
 
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-image {
+    height: 60px; /* Adjust as needed */
+    margin-left: 0px;
+}
+
 .navbar-title {
     font-size: 1.5rem;
     font-weight: bold;
@@ -83,3 +94,31 @@
     transform: scale(1.1);
 }
 
+.button-logo {
+    height: 40px; /* Adjust icon size */
+    margin-bottom: 5px; /* Space between logo and text */
+}
+
+.user-logout {
+    height: 40px; /* Adjust size of the GIF logo */
+    width: 40px; /* Ensure it's square */
+    border-radius: 50%; /* Optional: make it circular */
+}
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between logo, text, and button */
+}
+
+.nav-logout {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.nav-logout:hover {
+    background-color: #c82333;
+}   

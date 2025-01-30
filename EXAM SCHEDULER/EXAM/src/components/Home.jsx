@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
+import HomePageImage from '../assets/HomePage.gif'; // Correctly import the image
 
 const Home = ({ user }) => {
     const [scheduledExams, setScheduledExams] = useState([]);
@@ -11,7 +12,7 @@ const Home = ({ user }) => {
         const fetchScheduledExams = async () => {
             try {
                 const mockScheduledExams = [
-                    { id: 1, name: 'Midterm Exam', subject: 'Mathematics', date: '2026-03-15', time: '10:00 AM' },
+                    { id: 1, name: 'Midterm Exam', subject: 'Mathematics', date: '2024-03-15', time: '10:00 AM' },
                     { id: 2, name: 'Final Exam', subject: 'Physics', date: '2026-03-22', time: '2:00 PM' },
                     { id: 3, name: 'Quiz 1', subject: 'Chemistry', date: '2023-03-08', time: '11:00 AM' },
                     { id: 4, name: 'Another Exam', subject: 'Biology', date: '2022-01-10', time: '1:00 PM' },
@@ -121,6 +122,9 @@ const Home = ({ user }) => {
                         </div>
                     ))}
                 </div>
+            </div>
+            <div className="image-container">
+                <img src={HomePageImage} alt="Decorative" />
             </div>
         </div>
     );

@@ -1,37 +1,35 @@
-// ExamHistory.jsx (New component)
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import axios for API request
 import './ExamHistory.css';
 
-
 const ExamHistory = ({ user }) => {
-    const [scheduledExams, setScheduledExams] = useState([]);
+    const [pastExams, setPastExams] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchScheduledExams = async () => {
+            if (!user) return;
+            
             try {
-                const mockScheduledExams = [
-                    { id: 1, name: 'Midterm Exam', subject: 'Mathematics', date: '2024-03-15', time: '10:00 AM' },
-                    { id: 2, name: 'Final Exam', subject: 'Physics', date: '2024-03-22', time: '2:00 PM' },
-                    { id: 3, name: 'Quiz 1', subject: 'Chemistry', date: '2023-03-08', time: '11:00 AM' },
-                    { id: 4, name: 'Another Exam', subject: 'Biology', date: '2022-01-10', time: '1:00 PM' },
-                ];
-                await new Promise(resolve => setTimeout(resolve, 500));
-                setScheduledExams(mockScheduledExams);
+                const response = await axios.get('http://localhost:5001/exams', {
+                    params: { createdBy: user.email }
+                });
+
+                // Get only past exams (before today's date)
+                const today = new Date().toISOString().split("T")[0];
+                const filteredExams = response.data.filter(exam => exam.date < today);
+
+                setPastExams(filteredExams);
             } catch (err) {
                 setError(err);
-                console.error("Error fetching scheduled exams:", err);
+                console.error("Error fetching exam history:", err);
             } finally {
                 setLoading(false);
             }
         };
 
-        if (user) {
-            fetchScheduledExams();
-        } else {
-            setLoading(false);
-        }
+        fetchScheduledExams();
     }, [user]);
 
     if (!user) {
@@ -49,14 +47,14 @@ const ExamHistory = ({ user }) => {
     return (
         <div className="history-container">
             <div className="history-content">
-                <h1>Exam History</h1>
-                {scheduledExams.length === 0 ? (
-                    <p className="no-exams-message">No exams found.</p>
+                <h1>Past Exam History</h1>
+                {pastExams.length === 0 ? (
+                    <p className="no-exams-message">No past exams found.</p>
                 ) : (
                     <div className="exam-list">
-                        {scheduledExams.map(exam => (
-                            <div key={exam.id} className="exam-item">
-                                <h3>{exam.name}</h3>
+                        {pastExams.map((exam, index) => (
+                            <div key={index} className="exam-item">
+                                <h3>{exam.examName}</h3>
                                 <p><span>Subject:</span> {exam.subject}</p>
                                 <p><span>Date:</span> {exam.date}, <span>Time:</span> {exam.time}</p>
                             </div>
@@ -68,4 +66,4 @@ const ExamHistory = ({ user }) => {
     );
 };
 
-export default ExamHistory; 
+export default ExamHistory;

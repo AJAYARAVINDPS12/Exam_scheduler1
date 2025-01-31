@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Home.css';
-import HomePageImage from '../assets/HomePage.gif'; // Correctly import the image
+import HomePageImage from '../assets/HomePage.gif';
 
 const Home = ({ user }) => {
     const [scheduledExams, setScheduledExams] = useState([]);
-    const [selectedExam, setSelectedExam] = useState(null); // State to track selected exam
+    const [selectedExam, setSelectedExam] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchScheduledExams = async () => {
-            try {
-                const mockScheduledExams = [
-                    { id: 1, name: 'Midterm Exam', subject: 'Mathematics', date: '2024-03-15', time: '10:00 AM' },
-                    { id: 2, name: 'Final Exam', subject: 'Physics', date: '2026-03-22', time: '2:00 PM' },
-                    { id: 3, name: 'Quiz 1', subject: 'Chemistry', date: '2023-03-08', time: '11:00 AM' },
-                    { id: 4, name: 'Another Exam', subject: 'Biology', date: '2022-01-10', time: '1:00 PM' },
-                ];
+            if (!user || !user.email) {
+                setLoading(false);
+                return;
+            }
 
-                await new Promise((resolve) => setTimeout(resolve, 500));
-                setScheduledExams(
-                    mockScheduledExams.filter((exam) => new Date(exam.date) >= new Date()) // Filter only current and upcoming exams
-                );
+            try {
+                const response = await axios.get(`http://localhost:5001/exams?createdBy=${user.email}`);
+                
+                // Get the current date in YYYY-MM-DD format
+                const currentDate = new Date().toISOString().split('T')[0];
+
+                // Filter exams that are upcoming or today
+                const upcomingExams = response.data.filter(exam => exam.date >= currentDate);
+
+                setScheduledExams(upcomingExams);
             } catch (err) {
                 setError(err);
                 console.error('Error fetching scheduled exams:', err);
@@ -30,19 +34,15 @@ const Home = ({ user }) => {
             }
         };
 
-        if (user) {
-            fetchScheduledExams();
-        } else {
-            setLoading(false);
-        }
+        fetchScheduledExams();
     }, [user]);
 
     const handleExamClick = (exam) => {
-        setSelectedExam(exam); // Set the clicked exam as selected
+        setSelectedExam(exam);
     };
 
     const handleBack = () => {
-        setSelectedExam(null); // Clear the selected exam to go back to the list
+        setSelectedExam(null);
     };
 
     if (!user) {
@@ -65,22 +65,15 @@ const Home = ({ user }) => {
     }
 
     if (selectedExam) {
-        // Detailed view for a selected exam
         return (
             <div className="home-container">
                 <div className="home-content">
                     <h1>Exam Details</h1>
                     <div className="exam-details">
-                        <h2>{selectedExam.name}</h2>
-                        <p>
-                            <span>Subject:</span> {selectedExam.subject}
-                        </p>
-                        <p>
-                            <span>Date:</span> {selectedExam.date}
-                        </p>
-                        <p>
-                            <span>Time:</span> {selectedExam.time}
-                        </p>
+                        <h2>{selectedExam.examName}</h2>
+                        <p><span>Subject:</span> {selectedExam.subject}</p>
+                        <p><span>Date:</span> {selectedExam.date}</p>
+                        <p><span>Time:</span> {selectedExam.time}</p>
                         <button className="back-button" onClick={handleBack}>
                             Back to Exams
                         </button>
@@ -90,38 +83,23 @@ const Home = ({ user }) => {
         );
     }
 
-    if (scheduledExams.length === 0) {
-        return (
-            <div className="home-container">
-                <div className="home-content">
-                    <h1>Your Upcoming Exams</h1>
-                    <p className="no-exams-message">No upcoming exams scheduled.</p>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="home-container">
             <div className="home-content">
                 <h1>Your Upcoming Exams</h1>
-                <div className="exam-list">
-                    {scheduledExams.map((exam) => (
-                        <div
-                            key={exam.id}
-                            className="exam-item clickable" // Add a class to indicate clickable
-                            onClick={() => handleExamClick(exam)} // Click handler for each exam
-                        >
-                            <h3>{exam.name}</h3>
-                            <p>
-                                <span>Subject:</span> {exam.subject}
-                            </p>
-                            <p>
-                                <span>Date:</span> {exam.date}, <span>Time:</span> {exam.time}
-                            </p>
-                        </div>
-                    ))}
-                </div>
+                {scheduledExams.length === 0 ? (
+                    <p className="no-exams-message">No upcoming exams scheduled.</p>
+                ) : (
+                    <div className="exam-list">
+                        {scheduledExams.map((exam) => (
+                            <div key={exam._id} className="exam-item clickable" onClick={() => handleExamClick(exam)}>
+                                <h3>{exam.examName}</h3>
+                                <p><span>Subject:</span> {exam.subject}</p>
+                                <p><span>Date:</span> {exam.date}, <span>Time:</span> {exam.time}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
             <div className="image-container">
                 <img src={HomePageImage} alt="Decorative" />
@@ -131,3 +109,4 @@ const Home = ({ user }) => {
 };
 
 export default Home;
+    

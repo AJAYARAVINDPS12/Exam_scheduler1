@@ -1,108 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import './Notification.css';
+import { useState, useEffect } from "react";
+import '../components/Notification.css';
 
-const Notification = ({ user }) => {
+const Notifications = ({ userEmail }) => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // State to track the expanded notification
-    const [expandedNotificationId, setExpandedNotificationId] = useState(null);
-
     useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                // Replace with your actual API call to fetch notifications for the user
-                const mockNotifications = [
-                    { id: 1, message: 'Your Midterm Exam is scheduled for March 15th at 10:00 AM.', type: 'info', details: 'The exam will cover chapters 1-5 of the syllabus, and it will be held in Room 101.' },
-                    { id: 2, message: 'The deadline for the Physics assignment is approaching.', type: 'warning', details: 'Submit the assignment by March 10th to avoid penalties. Remember to include all the necessary diagrams.' },
-                    { id: 3, message: 'New study materials have been uploaded for Chemistry.', type: 'info', details: 'You can access the materials in the course portal under the "Resources" section. The material includes notes, practice questions, and past exams.' },
-                ];
+        if (!userEmail) return;
 
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                setNotifications(mockNotifications);
-            } catch (err) {
-                setError(err);
-                console.error("Error fetching notifications:", err);
-            } finally {
+        fetch(`http://localhost:5001/notifications?createdBy=${userEmail}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Fetched notifications:", data);
+                setNotifications(data);
                 setLoading(false);
-            }
-        };
+            })
+            .catch(error => {
+                console.error("Error fetching notifications:", error);
+                setError("Failed to load notifications.");
+                setLoading(false);
+            });
+    }, [userEmail]);
 
-        fetchNotifications();
-    }, [user]);
+    const handleDismiss = (id) => {
+        setNotifications((prevNotifications) => prevNotifications.filter(notification => notification.id !== id));
+    };
 
-    const handleClearNotifications = async () => {
+    const handleClearAll = () => {
         setNotifications([]);
-        alert("Notifications cleared!");
     };
-
-    const handleDismissNotification = (id) => {
-        setNotifications(prev => prev.filter(notification => notification.id !== id));
-    };
-
-    const handleToggleDetails = (id) => {
-        // Toggle the expanded notification
-        setExpandedNotificationId(prevId => (prevId === id ? null : id));
-    };
-
-    if (loading) {
-        return <div className="loading-message">Loading notifications...</div>;
-    }
-
-    if (error) {
-        return <div className="error-message">Error loading notifications.</div>;
-    }
-
-    if (!notifications || notifications.length === 0) {
-        return (
-            <div className="notifications-container">
-                <div className="notifications-box">
-                    <h2 className="notifications-header">Notifications</h2>
-                    <div className="no-notifications">No new notifications.</div>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="notifications-container">
             <div className="notifications-box">
-                <h2 className="notifications-header">Notifications ({notifications.length})</h2>
-                <button className="clear-notifications-button" onClick={handleClearNotifications}>
-                    Clear All Notifications
-                </button>
-                <ul className="notification-list">
-                    {notifications.map((notification) => (
-                        <li key={notification.id} className={`notification-item ${notification.type}`}>
-                            <div className="notification-icon">
-                                {notification.type === 'info' ? 'ℹ️' : '⚠️'}
-                            </div>
-                            <div 
-                                className="notification-message" 
-                                onClick={() => handleToggleDetails(notification.id)}
-                            >
-                                {notification.message}
-                            </div>
-                            <button 
-                                className="dismiss-button" 
-                                onClick={() => handleDismissNotification(notification.id)}
-                            >
-                                X
-                            </button>
-                            {expandedNotificationId === notification.id && (
-                                <div className="notification-details">
-                                    <h4>Details:</h4>
-                                    <p>{notification.details}</p>
-                                </div>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+                <h2 className="notifications-header">📢 Notifications</h2>
+
+                {loading && <p className="loading-message">⏳ Loading notifications...</p>}
+                {error && <p className="error-message">❌ {error}</p>}
+
+                {notifications.length > 0 ? (
+                    <>
+                        <button className="clear-notifications-button" onClick={handleClearAll}>
+                            Clear All Notifications
+                        </button>
+                        <ul className="notification-list">
+                            {notifications.map((notification) => (
+                                <li key={notification.id} className={`notification-item ${notification.type || ''}`}>
+                                    <span className="notification-message">{notification.message}</span>
+                                    <button className="dismiss-button" onClick={() => handleDismiss(notification.id)}>✖</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                ) : (
+                    <p className="no-notifications">✅ No upcoming exams.</p>
+                )}
             </div>
         </div>
     );
 };
 
-export default Notification;
+export default Notifications;

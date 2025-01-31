@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for API requests
 import './SearchExam.css';
 
-
-const SearchExam = () => {
+const SearchExam = ({ user }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [noResults, setNoResults] = useState(false); // State for no results message
@@ -14,17 +14,19 @@ const SearchExam = () => {
             return;
         }
 
-        try {
-            // Replace this with your actual API call to fetch exam data
-            const mockExams = [
-                { id: 1, name: 'Midterm Exam', subject: 'Mathematics', date: '2024-03-15', time: '10:00 AM' },
-                { id: 2, name: 'Final Exam', subject: 'Physics', date: '2024-03-22', time: '2:00 PM' },
-                { id: 3, name: 'Quiz 1', subject: 'Chemistry', date: '2024-03-08', time: '11:00 AM' },
-                { id: 4, name: 'Another Exam', subject: 'Mathematics', date: '2024-04-10', time: '1:00 PM' },
-            ];
+        if (!user || !user.email) {
+            alert("Please log in first!");
+            return;
+        }
 
-            const results = mockExams.filter(exam =>
-                exam.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        try {
+            const response = await axios.get('http://localhost:5001/exams', {
+                params: { createdBy: user.email }
+            });
+
+            const exams = response.data;
+            const results = exams.filter(exam =>
+                exam.examName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 exam.subject.toLowerCase().includes(searchTerm.toLowerCase())
             );
 
@@ -57,10 +59,11 @@ const SearchExam = () => {
                 {searchResults.length > 0 && (
                     <ul className="search-results">
                         {searchResults.map((exam) => (
-                            <li key={exam.id} className="search-result-item">
-                                <h3>{exam.name}</h3>
+                            <li key={exam._id} className="search-result-item">
+                                <h3>{exam.examName}</h3>
                                 <p>Subject: {exam.subject}</p>
                                 <p>Date: {exam.date}, Time: {exam.time}</p>
+                                {exam.description && <p>Description: {exam.description}</p>}
                             </li>
                         ))}
                     </ul>

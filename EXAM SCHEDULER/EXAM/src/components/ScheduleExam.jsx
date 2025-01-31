@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios for API requests
 import './ScheduleExam.css';
-
 
 const ScheduleExam = ({ user }) => {
     const [examName, setExamName] = useState('');
@@ -9,17 +9,37 @@ const ScheduleExam = ({ user }) => {
     const [time, setTime] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle exam scheduling logic here (e.g., API call)
-        console.log("Exam scheduled:", { examName, subject, date, time, description });
-        // Reset the form after submission (optional)
-        setExamName('');
-        setSubject('');
-        setDate('');
-        setTime('');
-        setDescription('');
-        alert("Exam Scheduled!");
+
+        if (!user || !user.email) {
+            alert("Please log in first!");
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5001/schedule-exam', {
+                examName,
+                subject,
+                date,
+                time,
+                description,
+                createdBy: user.email // Send user email to associate the exam
+            });
+
+            console.log("Exam scheduled:", response.data);
+            alert("Exam Scheduled!");
+
+            // Reset form fields
+            setExamName('');
+            setSubject('');
+            setDate('');
+            setTime('');
+            setDescription('');
+        } catch (error) {
+            console.log("Error scheduling exam:", error);
+            alert("Failed to schedule exam");
+        }
     };
 
     return (
@@ -54,4 +74,4 @@ const ScheduleExam = ({ user }) => {
     );
 };
 
-export default ScheduleExam; 
+export default ScheduleExam;
